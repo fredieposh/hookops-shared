@@ -1,9 +1,12 @@
 {
-  "name": "hookops-shared",
+  "name": "@fredieposh/hookops-shared",
   "version": "1.0.0",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.js",
