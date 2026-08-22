@@ -7,8 +7,8 @@ on:
   pull_request:
 
 jobs:
-  ci:
-    name: Install / Lint / Typecheck / Test
+  quality:
+    name: Lint / Typecheck
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -29,17 +29,9 @@ jobs:
       - name: Type check
         run: npm run typecheck
 
-      - name: Run tests
-        run: npm run test
-
-  publish:
-    name: Publish to github packages
-    needs: ci
+  test:
+    name: Tests
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
-    permissions:
-      packages: write
-      contents: read
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -53,10 +45,61 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Build image
+      - name: test
+        run: npm run test
+
+  build:
+    name: Build
+    needs: [quality, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build
         run: npm run build
 
+      - name: Package
+        run: npm pack
+
+      - name: Upload artifact
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-package
+          path: '*.tgz'
+
+  publish:
+    name: Publish to github packages
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: npm-package
+          path: package
+
       - name: Publish
-        run: npm publish
+        run: npm publish package/*.tgz
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOLKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
