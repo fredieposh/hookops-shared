@@ -100,6 +100,6 @@ jobs:
           path: package
 
       - name: Publish
-        run: npm publish package/*.tgz
+        run: npm publish ./package/*.tgz
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
