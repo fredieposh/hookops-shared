@@ -43,14 +43,14 @@ describe('envelope contracts', () => {
     expect(result).toEqual({
       ok: false,
       error: {
-        code: COMPATIBILITY_ERROR_CODES,
+        code: COMPATIBILITY_ERROR_CODES.UNSUPPORTED_SCHEMA_MAJOR,
         supportedMajor: 1,
         receivedMajor: 2,
       },
     });
   });
 
-  it('accepts_minor_additive_fields', () => {
+  it('accepts_additive_minor_fields', () => {
     const envelope = {
       ...createEnvelope({ schemaVersion: '1.1' }),
       futureField: 'added by a newer compatible producer',

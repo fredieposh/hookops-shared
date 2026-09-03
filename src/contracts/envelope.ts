@@ -1,6 +1,6 @@
 import { Type, type Static, type TSchema } from '@sinclair/typebox';
 
-const SCHEMA_VERSION_PATTERN = String.raw`^(0|[1-9]\d*)\.(0|[1-9]\d*)$`;
+export const SCHEMA_VERSION_PATTERN = String.raw`^(0|[1-9]\d*)\.(0|[1-9]\d*)$`;
 const UTC_TIMESTAMP_PATTERN = String.raw`^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$`;
 
 const envelopeFields = {
