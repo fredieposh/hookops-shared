@@ -3,7 +3,13 @@ import { Value } from '@sinclair/typebox/value';
 import { describe, it, expect } from 'vitest';
 import { COMPATIBILITY_ERROR_CODES, checkSchemaCompatibility } from './compatibility.js';
 
-import { createEnvelopeSchema } from './envelope.js';
+import {
+  createEnvelopeSchema,
+  QueueEnvelopeSchema,
+  TelemetryEnvelopeSchema,
+  type QueueEnvelope,
+  type TelemetryEnvelope,
+} from './envelope.js';
 
 const schema = createEnvelopeSchema(
   Type.Object({
@@ -57,6 +63,32 @@ describe('envelope contracts', () => {
     };
 
     expect(Value.Check(schema, envelope)).toBe(true);
+    expect(checkSchemaCompatibility(envelope.schemaVersion).ok).toBe(true);
+  });
+
+  it('validates_versioned_queue_envelope', () => {
+    const envelope = {
+      schemaVersion: '1.0',
+      messageId: 'message-123',
+      correlationId: 'correlation-123',
+      occurredAt: '2026-08-29T20:00:00.000Z',
+      payload: {},
+    } satisfies QueueEnvelope;
+
+    expect(Value.Check(QueueEnvelopeSchema, envelope)).toBe(true);
+    expect(checkSchemaCompatibility(envelope.schemaVersion).ok).toBe(true);
+  });
+
+  it('validates_versioned_telemetry_envelope', () => {
+    const envelope = {
+      schemaVersion: '1.0',
+      messageId: 'message-123',
+      correlationId: 'correlation-123',
+      occurredAt: '2026-08-29T20:00:00.000Z',
+      payload: {},
+    } satisfies TelemetryEnvelope;
+
+    expect(Value.Check(TelemetryEnvelopeSchema, envelope)).toBe(true);
     expect(checkSchemaCompatibility(envelope.schemaVersion).ok).toBe(true);
   });
 });

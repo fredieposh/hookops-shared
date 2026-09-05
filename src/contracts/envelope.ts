@@ -10,6 +10,8 @@ const envelopeFields = {
   occurredAt: Type.String({ pattern: UTC_TIMESTAMP_PATTERN }),
 };
 
+const openPayloadSchema = Type.Record(Type.String(), Type.Unknown());
+
 export const createEnvelopeSchema = <TPayload extends TSchema>(payload: TPayload) =>
   Type.Object(
     {
@@ -22,5 +24,13 @@ export const createEnvelopeSchema = <TPayload extends TSchema>(payload: TPayload
   );
 
 export const EnvelopeSchema = createEnvelopeSchema(Type.Unknown());
+
+export const QueueEnvelopeSchema = createEnvelopeSchema(openPayloadSchema);
+
+export type QueueEnvelope = Static<typeof QueueEnvelopeSchema>;
+
+export const TelemetryEnvelopeSchema = createEnvelopeSchema(openPayloadSchema);
+
+export type TelemetryEnvelope = Static<typeof TelemetryEnvelopeSchema>;
 
 export type Envelope = Static<typeof EnvelopeSchema>;
