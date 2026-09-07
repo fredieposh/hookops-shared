@@ -1,6 +1,7 @@
 import { SCHEMA_VERSION_PATTERN } from './envelope.js';
 
 export const SUPPORTED_SCHEMA_MAJOR = 1;
+export const CURRENT_SCHEMA_VERSION = '1.0' as const;
 
 export const COMPATIBILITY_ERROR_CODES = {
   INVALID_SCHEMA_VERSION: 'INVALID_SCHEMA_VERSION',

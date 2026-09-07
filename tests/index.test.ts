@@ -11,7 +11,7 @@ import {
   isValidCorrelationId,
   type CompatibilityResult,
   type TelemetryEnvelope,
-} from './index.js';
+} from '../src/index.js';
 
 describe('public package API', () => {
   it('exports_contract_and_observability_members', () => {});
@@ -33,6 +33,6 @@ describe('public package API', () => {
   expect(compatibility.ok).toBe(true);
   expect(SUPPORTED_SCHEMA_MAJOR).toBe(1);
   expect(isValidCorrelationId(envelope.correlationId)).toBe(true);
-  expect(createPinoRedactionPaths).not.toHaveLength(0);
+  expect(createPinoRedactionPaths()).not.toHaveLength(0);
   expect(COMPATIBILITY_ERROR_CODES.INVALID_SCHEMA_VERSION).toBe('INVALID_SCHEMA_VERSION');
 });
