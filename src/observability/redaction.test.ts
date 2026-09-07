@@ -41,7 +41,7 @@ describe('pino redaction', () => {
         },
         body: {
           token: secrets.token,
-          passwords: secrets.password,
+          password: secrets.password,
           secret: secrets.bodySecret,
         },
       },

@@ -6,7 +6,7 @@ import {
   resolveCorrelationId,
 } from './correlation.js';
 
-describe('correlatein IDs', () => {
+describe('correlation IDs', () => {
   it('accepts_bounded_safe_ids', () => {
     expect(isValidCorrelationId('correlation-123')).toBe(true);
     expect(isValidCorrelationId('trace:123-abc.def')).toBe(true);
